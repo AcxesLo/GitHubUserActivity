@@ -12,6 +12,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
@@ -53,7 +55,7 @@ public class Main {
         HttpClient client = HttpClient.newHttpClient();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.github.com/users/"+ githubUser +"/events"))
+                .uri(URI.create("https://api.github.com/users/" + githubUser + "/events"))
                 .GET()
                 .build();
 
@@ -72,11 +74,19 @@ public class Main {
 
             GitHubEvent[] events = gson.fromJson(response.body(), GitHubEvent[].class);
 
+            Map<String, Integer> eventCounts = new HashMap<>();
+
             for (GitHubEvent event : events) {
-                System.out.println(event.type + " on " + event.repo.name);
+                String key = event.repo.name + " - " + event.type;
+                eventCounts.merge(key, 1, (a, b) -> Integer.sum(a, b));
             }
 
-            try {FileWriter fileWriter = new FileWriter(file, false);
+            for (Map.Entry<String, Integer> entry : eventCounts.entrySet()) {
+                System.out.println(entry.getKey() + ": " + entry.getValue());
+            }
+
+            try {
+                FileWriter fileWriter = new FileWriter(file, false);
                 gson.toJson(jsonElement, fileWriter);
                 System.out.println("Data written to file.");
             } catch (IOException e) {
