@@ -79,6 +79,13 @@ public class Main {
             for (GitHubEvent event : events) {
                 String key = event.repo.name + " - " + event.type;
                 eventCounts.merge(key, 1, (a, b) -> Integer.sum(a, b));
+
+                if (event.type.equals("PushEvent")) {
+                    if (event.payload.commits != null && !event.payload.commits.isEmpty()) {
+                        System.out.println("Pushed " + event.payload.commits.size()
+                                + " commit(s) to " + event.repo.name);
+                    }
+                }
             }
 
             for (Map.Entry<String, Integer> entry : eventCounts.entrySet()) {
@@ -92,11 +99,9 @@ public class Main {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }
+
