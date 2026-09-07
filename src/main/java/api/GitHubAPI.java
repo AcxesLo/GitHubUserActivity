@@ -12,7 +12,7 @@ public class GitHubAPI {
 
     public void requestAPI(String githubUser) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.github.com/users/" + githubUser.strip() + "/events"))
+                .uri(URI.create("https://api.github.com/users/" + githubUser.trim() + "/events"))
                 .GET()
                 .build();
 
