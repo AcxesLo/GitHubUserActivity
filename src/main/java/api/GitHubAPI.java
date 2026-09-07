@@ -12,15 +12,18 @@ public class GitHubAPI {
 
     public void requestAPI(String githubUser) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://api.github.com/users/" + githubUser + "/events"))
+                .uri(URI.create("https://api.github.com/users/" + githubUser.strip() + "/events"))
                 .GET()
                 .build();
 
         response = client.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println("Status: " + response.statusCode());
-    }
 
-    public HttpResponse<String> getResponse() {
-        return response;
+        String statusCode = String.valueOf(response.statusCode());
+        if (!statusCode.equals("200")) {
+            System.out.println("Request to the GitHub API failed. Error Code - " + response.statusCode());
+        } else {
+            System.out.println("StatusCode: " + response.statusCode());
+        }
     }
 }

@@ -9,11 +9,11 @@ import com.google.gson.JsonParser;
 import java.io.File;
 import java.io.IOException;
 
-public class FileWriter {
+public class FileWriterGson {
+        public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public void writeFile() {
         String operatingUser = System.getProperty("user.name");
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         JsonElement jsonElement = JsonParser.parseString(GitHubAPI.response.body());
 
         File file = new File("C:\\Users\\" + operatingUser + "\\Desktop\\githubrequest.json");
