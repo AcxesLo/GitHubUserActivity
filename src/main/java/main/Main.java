@@ -76,6 +76,7 @@ public class Main {
 
             Map<String, Integer> eventCounts = new HashMap<>();
 
+            // merging the events by the repos printing non-pushed commits
             for (GitHubEvent event : events) {
                 String key = event.repo.name + " - " + event.type;
                 eventCounts.merge(key, 1, (a, b) -> Integer.sum(a, b));
